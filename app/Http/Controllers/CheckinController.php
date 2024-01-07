@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use App\Models\Checkin;
 use Illuminate\Http\Request;
 use DB;
 class CheckinController extends Controller
@@ -13,8 +15,9 @@ class CheckinController extends Controller
      */
     public function index()
     {
-        $data=DB::select(DB::raw("select * from checkin"));
-        return view('checkin.index', compact('data'));
+        $data = DB::table('checkin')->join('pelanggan', 'checkin.id_pelanggan', '=', 'pelanggan.id_pelanggan')->join('kamar', 'checkin.id_kamar', '=', 'kamar.id_kamar')->get();
+        return view('checkin.index',['data'=>$data]);
+
     }
 
     /**
@@ -24,7 +27,9 @@ class CheckinController extends Controller
      */
     public function create()
     {
-        return view('checkin.create');
+        $pelanggan=DB::select(DB::raw("select * from pelanggan"));
+        $kamar=DB::table('kamar')->where('status','Tersedia')->get();
+        return view('checkin.create', compact('pelanggan','kamar'));
     }
 
     /**
@@ -36,18 +41,30 @@ class CheckinController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nama' => 'required',
-            'no_hp' => 'required',
-            'email' => 'required',
-            'alamat' => 'required',
-            'tipe_kamar' => 'required',
+            'id_pelanggan' => 'required',
+            'id_kamar' => 'required',
+            'status' => 'required',
             'checkin_date' => 'required',
             'checkout_date' => 'required',
             'jumlah_orang' => 'required'
         ]);
+        $checkin=new DateTime($request->checkin_date);
+        $checkout=new DateTime($request->checkout_date);
+        $jarak=$checkin->diff($checkout);
+        
+        $harga = DB::table("kamar")->where('id_kamar', '=', $request->id_kamar)->select('harga')->first();
+        $total_harga = $harga->harga * $jarak->days;
+        
+        if($request->status=="Checkout"){
+            DB::update("UPDATE `kamar` SET `status`='Tersedia' WHERE id_kamar=?",
+            [$request->id_kamar]);
+        }else{
+            DB::update("UPDATE `kamar` SET `status`='Terpesan' WHERE id_kamar=?",
+            [$request->id_kamar]);
+        }
 
-        DB::insert("INSERT INTO `checkin` (`id`,`nama`, `no_hp`, `email`, `alamat`, `tipe_kamar`, `checkin_date`, `checkout_date`, `jumlah_orang`) VALUES (uuid(), ?, ?, ?, ?, ?, ?, ?, ?)",
-        [$request->nama,$request->no_hp,$request->email,$request->alamat,$request->tipe_kamar,$request->checkin_date,$request->checkout_date,$request->jumlah_orang]);
+        DB::insert("INSERT INTO `checkin` (`id`,`checkin_date`, `checkout_date`, `jumlah_orang`, `id_pelanggan`, `id_kamar`, `total_harga`, `status_checkin`) VALUES (uuid(), ?, ?, ?, ?, ?, ?, ?)",
+        [$request->checkin_date,$request->checkout_date,$request->jumlah_orang,$request->id_pelanggan,$request->id_kamar,$total_harga,$request->status]);
         return redirect()->route('checkin.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
@@ -70,8 +87,10 @@ class CheckinController extends Controller
      */
     public function edit($id)
     {
+        $pelanggan=DB::select(DB::raw("select * from pelanggan"));
+        $kamar=DB::select(DB::raw("select * from kamar"));
         $data=DB::table('checkin')->where('id',$id)->first();
-        return view('checkin.edit', compact('data'));
+        return view('checkin.edit', compact('data','pelanggan','kamar'));
     }
 
     /**
@@ -84,19 +103,32 @@ class CheckinController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'nama' => 'required',
-            'no_hp' => 'required',
-            'email' => 'required',
-            'alamat' => 'required',
-            'tipe_kamar' => 'required',
+            'id_pelanggan' => 'required',
+            'id_kamar' => 'required',
+            'status' => 'required',
             'checkin_date' => 'required',
             'checkout_date' => 'required',
             'jumlah_orang' => 'required'
         ]);
+        $checkin=new DateTime($request->checkin_date);
+        $checkout=new DateTime($request->checkout_date);
+        $jarak=$checkin->diff($checkout);
+        
+        $harga = DB::table("kamar")->where('id_kamar', '=', $request->id_kamar)->select('harga')->first();
+        $total_harga = $harga->harga * $jarak->days;
+        
+        if($request->status=="Checkout"){
+            DB::update("UPDATE `kamar` SET `status`='Tersedia' WHERE id_kamar=?",
+            [$request->id_kamar]);
+        }else{
+            DB::update("UPDATE `kamar` SET `status`='Terpesan' WHERE id_kamar=?",
+            [$request->id_kamar]);
+        }
+
         
         
-            DB::update("UPDATE `checkin` SET `nama`=?,`no_hp`=?,`email`=?,`alamat`=?,`tipe_kamar`=?,`checkin_date`=?,`checkout_date`=?,`jumlah_orang`=? WHERE id=?",
-            [$request->nama,$request->no_hp,$request->email,$request->alamat,$request->tipe_kamar,$request->checkin_date,$request->checkout_date,$request->jumlah_orang,$id]);
+            DB::update("UPDATE `checkin` SET `id_pelanggan`=?,`id_kamar`=?,`status_checkin`=?,`checkin_date`=?,`checkout_date`=?,`jumlah_orang`=?,`total_harga`=? WHERE id=?",
+            [$request->id_pelanggan,$request->id_kamar,$request->status,$request->checkin_date,$request->checkout_date,$request->jumlah_orang,$total_harga,$id]);
         
         return redirect()->route('checkin.index')->with(['success' => 'Data Berhasil Diupdate!']);
     }

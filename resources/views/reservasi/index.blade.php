@@ -11,7 +11,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                <th scope="col">Nama</th>
+                                <th scope="col">nama_pelanggan</th>
                                     <th scope="col">Tanggal Masuk</th>
                                     <th scope="col">Tanggal Keluar</th>
                                     <th scope="col">Aksi</th>
@@ -20,7 +20,7 @@
                             <tbody>
                             @forelse ($data as $reservasi)
                                 <tr>
-                                    <td>{{ $reservasi->nama}}</td>
+                                    <td>{{ $reservasi->nama_pelanggan}}</td>
                                     <td>{{ $reservasi->tanggal_masuk}}</td>
                                     <td>{{ $reservasi->tanggal_keluar}}</td>
 

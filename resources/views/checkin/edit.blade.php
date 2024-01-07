@@ -10,69 +10,53 @@
                         <form action="{{ route('checkin.update',$data->id) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            <div class="form-group">
-                                <label class="font-weight-bold">Nama</label>
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" placeholder="Nama">
-                                <!-- error message untuk nama -->
-                                @error('nama')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label class="font-weight-bold">Nomor HP</label>
-                                <input type="number" class="form-control @error('no_hp') is-invalid @enderror" name="no_hp" placeholder="Nomor HP">
-                                <!-- error message untuk no_hp -->
-                                @error('no_hp')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label class="font-weight-bold">Email</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Email">
-                                <!-- error message untuk kodepelanggan_2257301071 -->
-                                @error('email')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label class="font-weight-bold">Alamat</label>
-                                <input type="text" class="form-control @error('alamat') is-invalid @enderror" name="alamat" placeholder="Alamat">
-                                <!-- error message untuk alamat -->
-                                @error('alamat')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label class="font-weight-bold">Tipe Kamar</label>
-                                <select class="form-control @error('tipe_kamar') is-invalid @enderror" name="tipe_kamar">
-                                    <option value="Standar">Standar</option>
-                                    <option value="Superior">Superior</option>
-                                    <option value="Deluxe">Deluxe</option>
-                                    <option value="Suite">Suite</option>
+                            <div class="form-group mb-4">
+                                <label class="font-weight-bold">No Kamar</label>
+                                <select class="form-control @error('id_kamar') is-invalid @enderror" name="id_kamar">
+                                @foreach ($kamar as $datakamar)
+                                    <option {{$data->id_kamar==$datakamar->id_kamar ? 'selected':''}} value="{{$datakamar->id_kamar}}">{{$datakamar->no_kamar}}</option>
+                                    @endforeach
                                 </select>
                                 <!-- error message untuk tipe_kamar -->
-                                @error('tipe_kamar')
+                                @error('id_kamar')
                                 <div class="alert alert-danger mt-2">
 
                                     {{ $message }}
                                 </div>
                                 @enderror
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-4">
+                                <label class="font-weight-bold">Nama</label>
+                                <select class="form-control @error('id_pelanggan') is-invalid @enderror" name="id_pelanggan">
+                                @foreach ($pelanggan as $datapelanggan)
+                                    <option {{$data->id_pelanggan==$datapelanggan->id_pelanggan ? 'selected':''}} value="{{$datapelanggan->id_pelanggan}}">{{$datapelanggan->nama}}</option>
+                                    @endforeach
+                                </select>
+                                <!-- error message untuk tipe_kamar -->
+                                @error('id_pelanggan')
+                                <div class="alert alert-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                                <div class="form-group mb-4">
+                                <label class="font-weight-bold">Status</label>
+                                <select class="form-control @error('status') is-invalid @enderror" name="status">
+                                    <option {{$data->status_checkin=='Aktif' ? 'selected':''}} value="Aktif">Aktif</option>
+                                    <option  {{$data->status_checkin=='Checkout' ? 'selected':''}} value="Checkout">Checkout</option>
+                                    <option  {{$data->status_checkin=='Reservasi' ? 'selected':''}} value="Reservasi">Reservasi</option>
+                                </select>
+                                <!-- error message untuk tipe_kamar -->
+                                @error('status')
+                                <div class="alert alert-danger mt-2">
+
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-4">
                                 <label class="font-weight-bold">Check In Date</label>
-                                <input type="date" class="form-control @error('checkin_date') is-invalid @enderror" name="checkin_date" placeholder="Check In Date">
+                                <input type="date" value="{{$data->checkin_date}}" class="form-control @error('checkin_date') is-invalid @enderror" name="checkin_date" placeholder="Check In Date">
                                 <!-- error message untuk no_hp -->
                                 @error('checkin_date')
                                 <div class="alert alert-danger mt-2">
@@ -81,10 +65,10 @@
                                 </div>
                                 @enderror
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-4">
                                 <label class="font-weight-bold">Check Out Date</label>
-                                <input type="date" class="form-control @error('checkout_date') is-invalid @enderror" name="checkout_dateg" placeholder="Check Out Date">
-                                <!-- error message untuk no_hp -->
+                                <input type="date"  value="{{$data->checkout_date}}" class="form-control @error('checkout_date') is-invalid @enderror" name="checkout_date" placeholder="Check Out Date">
+                                <!-- error message untuk checkout_date -->
                                 @error('checkout_date')
                                 <div class="alert alert-danger mt-2">
 
@@ -92,9 +76,9 @@
                                 </div>
                                 @enderror
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-4">
                                 <label class="font-weight-bold">Jumlah Orang</label>
-                                <input type="number" class="form-control @error('jumlah_orang') is-invalid @enderror" name="jumlah_orang" placeholder="Jumlah Orang">
+                                <input type="number" value="{{$data->jumlah_orang}}" class="form-control @error('jumlah_orang') is-invalid @enderror" name="jumlah_orang" placeholder="Jumlah Orang">
                                 <!-- error message untuk no_hp -->
                                 @error('jumlah_orang')
                                 <div class="alert alert-danger mt-2">

@@ -100,8 +100,8 @@
               <div data-i18n="Layouts">Check In</div>
             </a>
           </li>
-
-          <!-- Check Out -->
+<!-- 
+          Check Out
           <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toogle">
               <i class="menu-icon tf-icons mdi mdi-clock-out"></i>
@@ -109,12 +109,12 @@
             </a>
           </li>
           <!-- Reservasi -->
-          <li class="menu-item">
+          <!-- <li class="menu-item">
             <a href="reservasi" class="menu-link menu-toogle">
               <i class="menu-icon tf-icons mdi mdi-checkbook"></i>
               <div data-i18n="Layouts">Reservasi</div>
             </a>
-          </li>
+          </li> --> -->
 
           <!-- Laporan -->
           <li class="menu-item">

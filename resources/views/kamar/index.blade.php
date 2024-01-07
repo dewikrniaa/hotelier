@@ -13,7 +13,7 @@
                                 <tr>
                                     <th scope="col">Nomor kamar</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Jumlah</th>
+                                    <th scope="col">Jumlah Orang</th>
                                     <th scope="col">Tipe kamar</th>
                                     <th scope="col">Harga</th>
                                     <th scope="col"><center>Aksi</center></th>

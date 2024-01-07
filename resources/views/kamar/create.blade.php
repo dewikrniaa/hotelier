@@ -15,27 +15,25 @@
                                 <!-- error message untuk nofaktur_2257301071 -->
                                 @error('no_kamar')
                                 <div class="alert alert-danger mt-2">
-
                                     {{ $message }}
                                 </div>
                                 @enderror
                             </div>
+                            <br>
                             <div class="form-group">
                                 <label class="font-weight-bold">Status</label>
                                 <select class="form-control @error('status') is-invalid @enderror" name="status">
                                     <option value="Tersedia">Tersedia</option>
-                                    <option value="Terpesan">Terpesan</option>
-                                    <option value="Sedang Ditempati">Sedang Ditempati</option>
                                     <option value="Maintenance">Maintenance</option>
                                 </select>
                                 <!-- error message untuk status -->
                                 @error('status')
                                 <div class="alert alert-danger mt-2">
-
                                     {{ $message }}
                                 </div>
                                 @enderror
                             </div>
+                            <br>
                             <div class="form-group">
                                 <label class="font-weight-bold">Jumlah orang</label>
                                 <input type="number" class="form-control @error('jumlah') is-invalid @enderror" name="jumlah" placeholder="Masukkan Jumlah orang">
@@ -47,6 +45,7 @@
                                 </div>
                                 @enderror
                             </div>
+                            <br>
                             <div class="form-group">
                                 <label class="font-weight-bold">Tipe Kamar</label>
                                 <select class="form-control @error('tipe_kamar') is-invalid @enderror" name="tipe_kamar">
@@ -63,14 +62,16 @@
                                 </div>
                                 @enderror
                             </div>
+                            <br>
                             <div class="form-group">
                                 <label class="font-weight-bold">Harga</label>
-                                <select class="form-control @error('harga') is-invalid @enderror" name="harga">
+                                <input type="text" class="form-control @error('harga') is-invalid @enderror" name="harga" placeholder="Masukkan Harga">
+                                <!-- <select class="form-control @error('harga') is-invalid @enderror" name="harga">
                                     <option value="500000">500,000</option>
                                     <option value="600000">600,000</option>
                                     <option value="700000">700,000</option>
                                     <option value="800000">800,000</option>
-                                </select>
+                                </select> -->
                                 <!-- error message untuk harga -->
                                 @error('harga')
                                 <div class="alert alert-danger mt-2">
@@ -78,7 +79,7 @@
                                 </div>
                                 @enderror
                             </div>
-
+                            <br>
                             <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
 
                             <button type="reset" class="btn btn-md btn-warning">RESET</button>

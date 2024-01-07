@@ -53,20 +53,20 @@
     </li>
 
     <!-- Check Out -->
-    <li class="menu-item">
+    <!-- <li class="menu-item">
       <a href="{{ route('checkout.index') }}" class="menu-link menu-toogle">
         <i class="menu-icon tf-icons mdi mdi-clock-out"></i>
         <div data-i18n="Layouts">Check Out</div>
       </a>
-    </li>
+    </li> -->
 
     <!-- Reservasi -->
-    <li class="menu-item">
+    <!-- <li class="menu-item">
       <a href="{{ route('reservasi.index') }}" class="menu-link menu-toogle">
         <i class="menu-icon tf-icons mdi mdi-checkbook"></i>
         <div data-i18n="Layouts">Reservasi</div>
       </a>
-    </li>
+    </li> -->
 
     <!-- Laporan -->
     <li class="menu-item">
@@ -75,5 +75,13 @@
               <div data-i18n="Layouts">Laporan</div>
             </a>
           </li>
+          <!-- Pelanggan -->
+    <li class="menu-item">
+      <a href="{{ route('pelanggan.index') }}" class="menu-link menu-toogle">
+        <i class="menu-icon tf-icons mdi mdi-account"></i>
+        <div data-i18n="Layouts">Pelanggan</div>
+      </a>
+    </li>
   </ul>
+  
 </aside>

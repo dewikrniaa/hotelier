@@ -40,7 +40,7 @@ class ReservasiController extends Controller
             'tanggal_keluar' => 'required'
         ]);
 
-        DB::insert("INSERT INTO `reservasi` (`id_reservasi`,`nama`,`tanggal_masuk`, `tanggal_keluar`) VALUES (uuid(), ?, ?, ?)",
+        DB::insert("INSERT INTO `reservasi` (`nama_pelanggan`,`tanggal_masuk`, `tanggal_keluar`) VALUES ( ?, ?, ?)",
         [$request->nama,$request->tanggal_masuk,$request->tanggal_keluar]);
         return redirect()->route('reservasi.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }

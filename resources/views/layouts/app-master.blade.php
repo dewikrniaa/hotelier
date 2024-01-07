@@ -16,7 +16,7 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon/favicon.icons') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,30 +25,30 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
       rel="stylesheet" />
 
-    <link rel="stylesheet" href="../assets/vendor/fonts/materialdesignicons.css" />
+    <link rel="stylesheet" href="{{ asset('vendor/fonts/materialdesignicons.css') }}" />
 
     <!-- Menu waves for no-customizer fix -->
-    <link rel="stylesheet" href="../assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="{{ asset('vendor/libs/node-waves/node-waves.css') }}" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="../assets/css/demo.css" />
+    <link rel="stylesheet" href="{{ asset('vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('css/demo.css') }}" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="{{ asset('vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('vendor/libs/apex-charts/apex-charts.css') }}" />
 
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="../assets/vendor/js/helpers.js"></script>
+    <script src="{{ asset('vendor/js/helpers.js') }}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="../assets/js/config.js"></script>
+    <script src="{{ asset('/js/config.js') }}"></script>
   </head>
 
-<body>
+  <body style="background: white">
   <!-- Layout wrapper -->
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
@@ -116,7 +116,7 @@
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar avatar-online">
-                    <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                    <img src="{{ asset('/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle" />
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end mt-3 py-2">
@@ -129,7 +129,7 @@
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <h6 class="mb-0">Lutfi Ainnun</h6>
+                          <h6 class="mb-0">{{ Session::get('nama_user') }}</h6>
                           <small class="text-muted">Admin</small>
                         </div>
                       </div>
@@ -138,18 +138,7 @@
                   <li>
                     <div class="dropdown-divider my-1"></div>
                   </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      <i class="mdi mdi-account-outline me-1 mdi-20px"></i>
-                      <span class="align-middle">Akun</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      <i class="mdi mdi-cog-outline me-1 mdi-20px"></i>
-                      <span class="align-middle">Pengaturan</span>
-                    </a>
-                  </li>
+                  
                   <li>
                     <div class="dropdown-divider my-1"></div>
                   </li>

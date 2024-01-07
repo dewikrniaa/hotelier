@@ -36,7 +36,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
          */
         Route::get('/', 'LoginController@show')->name('login.show');
         Route::post('/', 'LoginController@login')->name('login.perform');
-
+        Route::get('/login', 'LoginController@show')->name('login');
     });
 
     Route::group(['middleware' => ['auth']], function() {

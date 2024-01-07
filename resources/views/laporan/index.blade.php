@@ -1,41 +1,34 @@
 @extends('layouts.app-master')
 @section('content')
 @auth
+
 <body style="background: white">
-<div class="container mt-5">
+    <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
-                        <a href="{{ route('laporan.create') }}" class="btn btn-md btn-success mb-3">TAMBAH LAPORAN</a>
+                    <h4 class="card-header">Laporan Pendapatan</h4>
                         <table class="table table-bordered">
+                            <caption class="ms-4 fw-bold text-end fs-3">
+                                Total Pendapatan : {{$total_pendapatan}}
+                            </caption>
                             <thead>
                                 <tr>
-                                    <th scope="col">Tanggal Masuk</th>
-                                    <th scope="col">Tanggal Keluar</th>
-                                    <th scope="col">Transaksi</th>
-                                    <th scope="col">Total</th>
-                                    <th scope="col">Aksi</th>
+                                    <th scope="col">Tanggal</th>
+                                    <th scope="col">Bulan</th>
+                                    <th scope="col">Tahun</th>
+                                    <th scope="col">Jumlah Check In</th>
+                                    <th scope="col">Total Transaksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($data as $laporan)
-                                </td>
-                                <td>{{ $laporan->tanggal_masuk}}</td>
-                                <td>{{ $laporan->tanggal_keluar}}</td>
-                                <td class="text-center">
-                                    <img src="{{Storage::url('public/laporan/') . $laporan->transaksi }}" class="rounded" style="width: 150px">
-                                </td>
-                                <td>{{ $laporan->total}}</td>
-                                <td class="text-center">
-                                    <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{route('laporan.destroy', $laporan->id) }}" method="post">
-                                        <a href="{{route('laporan.edit', $laporan->id) }}" class="btn btn-sm btn-primary">EDIT</a>
-
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
-                                    </form>
-                                </td>
+                                @forelse ($laporan as $data)
+                                <td>{{ $data->tanggal}}</td>
+                                <td>{{ $data->bulan}}</td>
+                                <td>{{ $data->tahun}}</td>
+                                <td>{{ $data->jumlah_check_in}}</td>
+                                <td>{{ $data->total_transaksi}}</td>
                                 </tr>
                                 @empty
                                 <div class="alert alert-danger">
@@ -51,11 +44,13 @@
     </div>
     <script>
         //message with toastr
-        @if(session()-> has('success'))
-        toastr.success('{{ session('success ') }}', 'BERHASIL!');
-        @elseif(session()-> has('error'))
-        toastr.error('{{ session('error ') }}', 'GAGAL!');
+        @if(session() -> has('success'))
+        toastr.success('{{ session('
+            success ') }}', 'BERHASIL!');
+        @elseif(session() -> has('error'))
+        toastr.error('{{ session('
+            error ') }}', 'GAGAL!');
         @endif
     </script>
- @endauth
-@endsection
+    @endauth
+    @endsection

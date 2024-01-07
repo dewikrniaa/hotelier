@@ -12,7 +12,7 @@
                             @method('PUT')
                             <div class="form-group">
                                 <label class="font-weight-bold">Nomor Kamar</label>
-                                <input type="text" class="form-control @error('no_kamar') is-invalid @enderror" name="no_kamar" placeholder="Masukkan Nomor kamar">
+                                <input type="text" value="{{$data->no_kamar}}" class="form-control @error('no_kamar') is-invalid @enderror" name="no_kamar" placeholder="Masukkan Nomor kamar">
                                 <!-- error message untuk nofaktur_2257301071 -->
                                 @error('no_kamar')
                                 <div class="alert alert-danger mt-2">
@@ -25,8 +25,6 @@
                                 <label class="font-weight-bold">Status</label>
                                 <select class="form-control @error('status') is-invalid @enderror" name="status">
                                     <option value="Tersedia">Tersedia</option>
-                                    <option value="Terpesan">Terpesan</option>
-                                    <option value="Sedang Ditempati">Sedang Ditempati</option>
                                     <option value="Maintenance">Maintenance</option>
                                 </select>
                                 <!-- error message untuk status -->
@@ -39,7 +37,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-bold">Jumlah orang</label>
-                                <input type="number" class="form-control @error('jumlah') is-invalid @enderror" name="jumlah" placeholder="Masukkan Jumlah orang">
+                                <input type="number" value="{{$data->jumlah}}" class="form-control @error('jumlah') is-invalid @enderror" name="jumlah" placeholder="Masukkan Jumlah orang">
                                 <!-- error message untuk kodepelanggan_2257301071 -->
                                 @error('jumlah')
                                 <div class="alert alert-danger mt-2">
@@ -66,12 +64,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-bold">Harga</label>
-                                <select class="form-control @error('harga') is-invalid @enderror" name="harga">
-                                    <option value="500000">500,000</option>
-                                    <option value="600000">600,000</option>
-                                    <option value="700000">700,000</option>
-                                    <option value="800000">800,000</option>
-                                </select>
+                                <input type="number" value="{{$data->harga}}" class="form-control @error('harga') is-invalid @enderror" name="harga" placeholder="Masukkan Harga">
                                 <!-- error message untuk harga -->
                                 @error('harga')
                                 <div class="alert alert-danger mt-2">

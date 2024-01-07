@@ -7,15 +7,14 @@
             <div class="col-md-12">
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
-                        <a href="{{ route('checkin.create') }}" class="btn btn-md btn-success mb-3">TAMBAH DATA checkin</a>
+                        <a href="{{ route('checkin.create') }}" class="btn btn-md btn-success mb-3">TAMBAH DATA </a>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">Nama</th>
-                                    <th scope="col">Nomor HP</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Alamat</th>
-                                    <th scope="col">Tipe Kamar</th>
+                                    <th scope="col">No Kamar</th>
+                                    <th scope="col">Total Harga</th>
+                                    <th scope="col">Status</th>
                                     <th scope="col">Check In Date</th>
                                     <th scope="col">Check Out Date</th>
                                     <th scope="col">Jumlah Orang</th>
@@ -26,10 +25,9 @@
                                 @forelse ($data as $checkin)
                                 <tr>
                                     <td>{{ $checkin->nama}}</td>
-                                    <td>{{ $checkin->no_hp}}</td>
-                                    <td>{{ $checkin->email}}</td>
-                                    <td>{{ $checkin->alamat}}</td>
-                                    <td>{{ $checkin->tipe_kamar}}</td>
+                                    <td>{{ $checkin->no_kamar}}</td>
+                                    <td>{{ $checkin->total_harga}}</td>
+                                    <td>{{ $checkin->status_checkin}}</td>
                                     <td>{{ $checkin->checkin_date}}</td>
                                     <td>{{ $checkin->checkout_date}}</td>
                                     <td>{{ $checkin->jumlah_orang}}</td>
