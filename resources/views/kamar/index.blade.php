@@ -8,7 +8,7 @@
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
                         <a href="{{ route('kamar.create') }}" class="btn btn-md btn-success mb-3">TAMBAH DATA KAMAR</a>
-                        <table class="table table-bordered">
+                        <table id="kamar" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">Nomor kamar</th>
@@ -26,7 +26,7 @@
                                     <td>{{ $kamar->status}}</td>
                                     <td>{{ $kamar->jumlah}}</td>
                                     <td>{{ $kamar->tipe_kamar}}</td>
-                                    <td>{{ $kamar->harga}}</td>
+                                    <td>{{ "RP ".number_format($kamar->harga,0,',','.')}}</td>
 
                                     <td class="text-center">
                                         <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{route('kamar.destroy', $kamar->id_kamar) }}" method="post">
@@ -49,14 +49,21 @@
             </div>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script>
         //message with toastr
-        @if(session()-> has('success'))
-        toastr.success('{{ session('success ') }}', 'BERHASIL!');
-        @elseif(session()-> has('error'))
-        toastr.error('{{ session('error ') }}', 'GAGAL!');
+        @if(session() -> has('success'))
+        toastr.success('{{ session('
+            success ') }}', 'BERHASIL!');
+        @elseif(session() -> has('error'))
+        toastr.error('{{ session('
+            error ') }}', 'GAGAL!');
         @endif
+        $(document).ready(function() {
+            $('#kamar').DataTable();
+        });
     </script>
  @endauth
 @endsection

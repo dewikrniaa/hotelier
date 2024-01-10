@@ -38,14 +38,19 @@ class PelangganController extends Controller
     {
         $this->validate($request, [
             'nama' => 'required',
+            'nik' => 'required',
+            'foto_ktp' => 'required',
             'email' => 'required',
             'alamat' => 'required',
             'no_hp' => 'required'
         ]);
+        $gambar_ktp = $request->file('foto_ktp');
+        $gambar_ktp->storeAs('public/ktp', $gambar_ktp->hashName());
+
 
         DB::insert(
-            "INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `email`, `alamat`, `no_hp`) VALUES (uuid(), ?, ?, ?, ?)",
-            [$request->nama, $request->email, $request->alamat, $request->no_hp]
+            "INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `nik`, `foto_ktp`, `email`, `alamat`, `no_hp`) VALUES (uuid(), ?, ?, ?, ?,?,?)",
+            [$request->nama, $request->nik, $request->foto_ktp->hashName(), $request->email, $request->alamat, $request->no_hp]
         );
         return redirect()->route('pelanggan.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
@@ -84,15 +89,18 @@ class PelangganController extends Controller
     {
         $this->validate($request, [
             'nama' => 'required',
+            'nik' => 'required',
+            'foto_ktp' => 'required',
             'email' => 'required',
             'alamat' => 'required',
             'no_hp' => 'required'
         ]);
-
+        $gambar_ktp = $request->file('foto_ktp');
+        $gambar_ktp->storeAs('public/ktp', $gambar_ktp->hashName());
 
         DB::update(
-            "UPDATE `pelanggan` SET `nama`=?,`email`=?,`alamat`=?,`no_hp`=? WHERE id_pelanggan=?",
-            [$request->nama, $request->email, $request->alamat, $request->no_hp, $id]
+            "UPDATE `pelanggan` SET `nama`=?,`nik`=?,`foto_ktp`=?,`email`=?,`alamat`=?,`no_hp`=? WHERE id_pelanggan=?",
+            [$request->nama, $request->nik, $request->foto_ktp->hashName(), $request->email, $request->alamat, $request->no_hp, $id]
         );
 
         return redirect()->route('pelanggan.index')->with(['success' => 'Data Berhasil Diupdate!']);

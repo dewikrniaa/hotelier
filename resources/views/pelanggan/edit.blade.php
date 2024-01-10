@@ -23,6 +23,28 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-4">
+                                <label class="font-weight-bold">NIK</label>
+                                <input type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" placeholder="NIK" value="{{ $data->nik }}">
+                                <!-- error message untuk nama -->
+                                @error('nik')
+                                <div class="alert alert-danger mt-2">
+
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-4">
+                                <label class="font-weight-bold">Upload KTP</label>
+                                <input type="file" class="form-control @error('foto_ktp') is-invalid @enderror" name="foto_ktp" placeholder="Upload KTP">
+                                <!-- error message untuk nama -->
+                                @error('foto_ktp')
+                                <div class="alert alert-danger mt-2">
+
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-4">
                                 <label class="font-weight-bold">Email</label>
                                 <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $data->email }}">
                                 <!-- error message untuk email-->

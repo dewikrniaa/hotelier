@@ -14,7 +14,6 @@
         </div>
         <div class="dropdown">
           <button class="btn p-0" type="button" id="newProjectID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="mdi mdi-dots-vertical mdi-24px"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="newProjectID">
             <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
@@ -41,7 +40,6 @@
         </div>
         <div class="dropdown">
           <button class="btn p-0" type="button" id="newProjectID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="mdi mdi-dots-vertical mdi-24px"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="newProjectID">
             <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
@@ -69,7 +67,6 @@
         </div>
         <div class="dropdown">
           <button class="btn p-0" type="button" id="newProjectID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="mdi mdi-dots-vertical mdi-24px"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="newProjectID">
             <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
@@ -97,7 +94,6 @@
         </div>
         <div class="dropdown">
           <button class="btn p-0" type="button" id="newProjectID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="mdi mdi-dots-vertical mdi-24px"></i>
           </button>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="newProjectID">
             <a class="dropdown-item" href="javascript:void(0);">Refresh</a>

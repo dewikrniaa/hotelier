@@ -9,10 +9,12 @@
                 <div class="card border-0 shadow rounded">
                     <div class="card-body">
                         <a href="{{ route('pelanggan.create') }}" class="btn btn-md btn-success mb-3">TAMBAH PELANGGAN</a>
-                        <table class="table table-bordered">
+                        <table id="pelanggan" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">Nama</th>
+                                    <th scope="col">NIK</th>
+                                    <th scope="col">Foto KTP</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Alamat</th>
                                     <th scope="col">No HP</th>
@@ -23,6 +25,8 @@
                                 @forelse ($data as $pelanggan)
                                 <tr>
                                     <td>{{ $pelanggan->nama}}</td>
+                                    <td>{{ $pelanggan->nik}}</td>
+                                    <td><img src="{{asset('storage/ktp/'.$pelanggan->foto_ktp)}}" alt="foto ktp" width="100px"></td>
                                     <td>{{ $pelanggan->email}}</td>
                                     <td>{{ $pelanggan->alamat}}</td>
                                     <td>{{ $pelanggan->no_hp}}</td>
@@ -50,17 +54,21 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script>
         //message with toastr
-        @if(session()-> has('success'))
-        toastr.success('{{ session('success ') }}', 'BERHASIL!');
-        @elseif(session()-> has('error'))
-        toastr.error('{{ session('error ') }}', 'GAGAL!');
+        @if(session() -> has('success'))
+        toastr.success('{{ session('
+            success ') }}', 'BERHASIL!');
+        @elseif(session() -> has('error'))
+        toastr.error('{{ session('
+            error ') }}', 'GAGAL!');
         @endif
+        $(document).ready(function() {
+            $('#pelanggan').DataTable();
+        });
     </script>
  @endauth
 @endsection
