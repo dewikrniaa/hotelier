@@ -1,6 +1,6 @@
-# Sistem Informasi Hotel
+# Sistem Pengelolaan Hotel
 
-Sistem Informasi Hotel adalah aplikasi berbasis web untuk membantu pengelolaan operasional hotel. Aplikasi ini digunakan untuk mengelola data kamar, pelanggan, proses check-in, pembayaran, checkout, dan laporan pendapatan.
+Sistem Pengelolaan Hotel adalah aplikasi berbasis web untuk membantu pengelolaan operasional hotel. Aplikasi ini digunakan untuk mengelola data kamar, pelanggan, proses check-in, pembayaran, checkout, dan laporan pendapatan.
 
 Project ini dikembangkan secara kolaboratif menggunakan Laravel dan MySQL dengan struktur MVC. Repository digunakan sebagai dokumentasi pengembangan dan versioning source code.
 
@@ -70,8 +70,8 @@ Relasi foreign key:
 1. Clone repository:
 
 ```bash
-git clone https://github.com/shsyyp/Sistem-Informasi-Hotel.git
-cd Sistem-Informasi-Hotel
+git clone https://github.com/dewikrniaa/hotelier.git
+cd hotelier
 ```
 
 2. Install dependency PHP:
@@ -193,7 +193,7 @@ Catatan: route `/` pada aplikasi diarahkan ke halaman login, sehingga test bawaa
 Repository GitHub:
 
 ```text
-https://github.com/shsyyp/Sistem-Informasi-Hotel
+https://github.com/dewikrniaa/hotelier
 ```
 
 ## Kontributor
@@ -211,3 +211,4 @@ Project ini dapat dikembangkan lebih lanjut dengan:
 - Menambahkan dokumentasi ERD.
 - Menambahkan pengujian fitur untuk modul kamar, pelanggan, check-in, dan laporan.
 - Menyempurnakan README dengan screenshot aplikasi.
+
