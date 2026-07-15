@@ -198,9 +198,10 @@ https://github.com/dewikrniaa/hotelier
 
 ## Kontributor
 
-- Denisa Ruthdiani Siagian
+- Dewi Kurnia Sari
 - Lutfi Ainnun Fruityantri
 - Shasy Wiade Putri
+- Denisa Ruthdiani Siagian
 
 ## Catatan Pengembangan
 
