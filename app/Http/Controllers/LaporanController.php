@@ -3,139 +3,81 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\LaporanExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $laporan = DB::table('checkin')
-            ->selectRaw('YEAR(checkin_date) as tahun, MONTH(checkin_date) as bulan, DAY(checkin_date) as tanggal, COUNT(*) as jumlah_check_in ,SUM(total_harga) as total_transaksi')
-            ->groupBy(DB::raw('YEAR(checkin_date)'), DB::raw('MONTH(checkin_date)'), DB::raw('DAY(checkin_date)'))
+            ->where('status_pembayaran', 'Lunas') // 🔥 FILTER
+            ->selectRaw('
+            YEAR(checkin_date) as tahun,
+            MONTH(checkin_date) as bulan,
+            DAY(checkin_date) as tanggal,
+            COUNT(*) as jumlah_check_in,
+            SUM(total_harga) as total_transaksi
+        ')
+            ->groupByRaw('YEAR(checkin_date), MONTH(checkin_date), DAY(checkin_date)')
             ->orderByDesc('tahun')
             ->orderByDesc('bulan')
             ->orderByDesc('tanggal')
             ->get();
 
         $total_pendapatan = DB::table('checkin')
+            ->where('status_pembayaran', 'Lunas') // 🔥 FILTER
             ->sum('total_harga');
-        return view('laporan.index', compact('laporan','total_pendapatan'));
-        //
+
+        return view('laporan.index', compact('laporan', 'total_pendapatan'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('laporan.create');
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function export(Request $request)
     {
-        $this->validate($request, [
-            'tanggal_masuk' => 'required',
-            'tanggal_keluar' => 'required',
-            'transaksi' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'total' => 'required'
+        $request->validate([
+            'periode' => 'required|in:harian,bulanan,tahunan',
+            'format'  => 'required|in:pdf,excel'
         ]);
 
-        //upload image
-        $image = $request->file('transaksi');
-        $image->storeAs('public/laporan', $image->hashName());
-
-        DB::insert(
-            "INSERT INTO `laporan` (`id`,`tanggal_masuk`,`tanggal_keluar`,`transaksi`,`total`) values (uuid(),?,?,?,?)",
-            [$request->tanggal_masuk, $request->tanggal_keluar, $image->hashName(), $request->total]
-        );
-        return redirect()->route('laporan.index')->with(['success' => 'Data Berhasil Disimpan']);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $data = DB::table('laporan')->where('id', $id)->first();
-        return view('laporan.edit', compact('data'));
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-
-            'tanggal_masuk' => 'required',
-            'tanggal_keluar' => 'required',
-            'transaksi' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'total' => 'required',
-        ]);
-
-        //cek update foto
-        if ($request->file('transaksi')) {
-            $image = $request->file('transaksi');
-            $image->storeAs('public/laporan', $image->hashName());
-
-            DB::update(
-                "UPDATE `laporan` SET `tanggal_masuk`=?,`tanggal_keluar`=?,`transaksi`=?,`total`=? WHERE id=?",
-                [$request->tanggal_masuk, $request->tanggal_keluar, $image->hashName(), $request->total, $id]
-            );
+        // ===== DATA =====
+        if ($request->periode === 'harian') {
+            $laporan = DB::table('checkin')
+                ->where('status_pembayaran', 'Lunas')
+                ->selectRaw('DATE(checkin_date) as periode, COUNT(*) as jumlah_check_in, SUM(total_harga) as total_transaksi')
+                ->groupByRaw('DATE(checkin_date)')
+                ->get();
+        } elseif ($request->periode === 'bulanan') {
+            $laporan = DB::table('checkin')
+                ->where('status_pembayaran', 'Lunas')
+                ->selectRaw('YEAR(checkin_date) as tahun, MONTH(checkin_date) as bulan, COUNT(*) as jumlah_check_in, SUM(total_harga) as total_transaksi')
+                ->groupByRaw('YEAR(checkin_date), MONTH(checkin_date)')
+                ->get();
         } else {
-            DB::update(
-                "UPDATE `laporan` SET `tanggal_masuk`=?,`tanggal_keluar`=?,`total`=? WHERE id=?",
-                [$request->tanggal_masuk, $request->tanggal_keluar, $request->total, $id]
-            );
+            $laporan = DB::table('checkin')
+                ->where('status_pembayaran', 'Lunas')
+                ->selectRaw('YEAR(checkin_date) as periode, COUNT(*) as jumlah_check_in, SUM(total_harga) as total_transaksi')
+                ->groupByRaw('YEAR(checkin_date)')
+                ->get();
         }
-        return redirect()->route('laporan.index')->with(['success' => 'Data Berhasil Diupdate!']);
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        DB::table('laporan')->where('id', $id)->delete();
+        $total_pendapatan = $laporan->sum('total_transaksi');
 
-        //redirect to index
-        return redirect()->route('laporan.index')->with(['success' => 'Data Berhasil Dihapus!']);
-        //
+        // ===== PDF =====
+        if ($request->format === 'pdf') {
+            return Pdf::loadView('laporan.export-pdf', [
+                'laporan' => $laporan,
+                'periode' => $request->periode,
+                'total_pendapatan' => $total_pendapatan
+            ])->download('laporan-' . $request->periode . '.pdf');
+        }
+
+        // ===== EXCEL (.xlsx) =====
+        return Excel::download(
+            new LaporanExport($laporan, $request->periode),
+            'laporan-' . $request->periode . '.xlsx'
+        );
     }
 }

@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('backup:database')->dailyAt('21:00');
     }
 
     /**
@@ -25,8 +25,13 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
+
+    protected $middleware = [
+        // middleware lain
+        \App\Http\Middleware\SecurityHeaders::class,
+    ];
 }
