@@ -1,90 +1,88 @@
 @extends('layouts.app-master')
+
 @section('content')
-@auth
-
-<body style="background: white">
-    <div class="container mt-5 mb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card border-0 shadow rounded">
+    <div class="content-wrapper">
+        <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card">
+                <div class="card shadow border-0 rounded">
                     <div class="card-body">
-                        <form action="{{ route('pelanggan.store') }}" method="post" enctype="multipart/form-data">
+                        <h4 class="">Tambah Data Pelanggan</h4>
+                        <form action="{{ route('pelanggan.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">Nama</label>
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" placeholder="Nama">
-                                <!-- error message untuk nama -->
+
+                            <div class="form-group mb-3">
+                                <label>Nama</label>
+                                <input type="text" name="nama"
+                                    class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}"
+                                    required>
                                 @error('nama')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                 @enderror
                             </div>
 
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">NIK</label>
-                                <input type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" placeholder="NIK">
-                                <!-- error message untuk nama -->
+                            <div class="form-group mb-3">
+                                <label>NIK</label>
+                                <input type="text" name="nik" class="form-control @error('nik') is-invalid @enderror"
+                                    maxlength="16" pattern="[0-9]{16}" value="{{ old('nik') }}" required>
+                                <small class="text-muted">NIK harus 16 digit angka</small>
                                 @error('nik')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">Upload KTP</label>
-                                <input type="file" class="form-control @error('foto_ktp') is-invalid @enderror" name="foto_ktp" placeholder="Upload KTP">
-                                <!-- error message untuk nama -->
+
+                            <div class="form-group mb-3">
+                                <label>Upload KTP</label>
+                                <input type="file" name="foto_ktp"
+                                    class="form-control @error('foto_ktp') is-invalid @enderror"
+                                    accept=".jpg,.jpeg,.png,.pdf" required>
+                                <small class="text-muted">Format file: JPG, PNG, PDF</small>
                                 @error('foto_ktp')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">Email</label>
-                                <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Email">
-                                <!-- error message untuk email -->
+
+                            <div class="form-group mb-3">
+                                <label>Email</label>
+                                <input type="email" name="email"
+                                    class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}"
+                                    required>
                                 @error('email')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">Alamat</label>
-                                <input type="text" class="form-control @error('alamat') is-invalid @enderror" name="alamat" placeholder="Alamat">
-                                <!-- error message untuk alamat -->
+
+                            <div class="form-group mb-3">
+                                <label>Alamat</label>
+                                <input type="text" name="alamat"
+                                    class="form-control @error('alamat') is-invalid @enderror" value="{{ old('alamat') }}"
+                                    required>
                                 @error('alamat')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">No HP</label>
-                                <input type="number" class="form-control @error('no_hp') is-invalid @enderror" name="no_hp" placeholder="No HP">
-                                <!-- error message untuk no_hp -->
+
+                            <div class="form-group mb-3">
+                                <label>No HP</label>
+                                <input type="text" name="no_hp"
+                                    class="form-control @error('no_hp') is-invalid @enderror"
+                                    value="{{ old('no_hp', $data->no_hp ?? '+62') }}" pattern="^\+62[0-9]{8,13}$"
+                                    placeholder="+628xxxxxxxxx" required>
+                                <small class="text-muted">
+                                    Format nomor harus diawali +62, contoh: +628123456789
+                                </small>
                                 @error('no_hp')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
 
-                            <button type="reset" class="btn btn-md btn-warning">RESET</button>
+                            <button class="btn btn-primary">Simpan</button>
+                            <a href="{{ route('pelanggan.index') }}" class="btn btn-secondary">Kembali</a>
+
                         </form>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    @endauth
-    @endsection
+@endsection

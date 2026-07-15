@@ -3,120 +3,155 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PelangganController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $data = DB::select(DB::raw("select * from pelanggan"));
+        $data = DB::table('pelanggan')->get();
         return view('pelanggan.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('pelanggan.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'nama' => 'required',
-            'nik' => 'required',
-            'foto_ktp' => 'required',
-            'email' => 'required',
-            'alamat' => 'required',
-            'no_hp' => 'required'
+        $request->validate([
+            'nama'      => 'required|string|max:100',
+            'nik'       => 'required|digits:16',
+            'foto_ktp' => [
+                'required',
+                'file',
+                'mimes:jpg,jpeg,png,pdf',
+                'mimetypes:image/jpeg,image/png,application/pdf',
+                'max:2048',
+            ],
+            'email'     => 'required|email',
+            'alamat'    => 'required|string|max:255',
+            'no_hp'     => ['required', 'regex:/^\+62[0-9]{8,13}$/'],
         ]);
-        $gambar_ktp = $request->file('foto_ktp');
-        $gambar_ktp->storeAs('public/ktp', $gambar_ktp->hashName());
 
+        // Simpan file KTP
+        $fotoKtp = $request->file('foto_ktp');
+        $fotoKtp->storeAs('ktp', $fotoKtp->hashName());
 
-        DB::insert(
-            "INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `nik`, `foto_ktp`, `email`, `alamat`, `no_hp`) VALUES (uuid(), ?, ?, ?, ?,?,?)",
-            [$request->nama, $request->nik, $request->foto_ktp->hashName(), $request->email, $request->alamat, $request->no_hp]
+        $idPelanggan = (string) \Illuminate\Support\Str::uuid();
+
+        DB::table('pelanggan')->insert([
+            'id_pelanggan' => $idPelanggan,
+            'nama'         => $request->nama,
+            'nik'          => $request->nik,
+            'foto_ktp'     => $fotoKtp->hashName(),
+            'email'        => $request->email,
+            'alamat'       => $request->alamat,
+            'no_hp'        => $request->no_hp,
+            'created_at'        => now(),
+            'updated_at'        => now(),
+        ]);
+
+        auditLog(
+            'CREATE',
+            'pelanggan',
+            $idPelanggan,
+            'Menambahkan data pelanggan baru'
         );
-        return redirect()->route('pelanggan.index')->with(['success' => 'Data Berhasil Disimpan!']);
+
+        return redirect()->route('pelanggan.index')
+            ->with('success', 'Data Berhasil Disimpan!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $data = DB::table('pelanggan')->where('id_pelanggan', $id)->first();
+        $data = DB::table('pelanggan')
+            ->where('id_pelanggan', $id)
+            ->first();
+
         return view('pelanggan.edit', compact('data'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'nama' => 'required',
-            'nik' => 'required',
-            'foto_ktp' => 'required',
-            'email' => 'required',
-            'alamat' => 'required',
-            'no_hp' => 'required'
+        $request->validate([
+            'nama'      => 'required|string|max:100',
+            'nik'       => 'required|digits:16',
+            'foto_ktp' => [
+                'required',
+                'file',
+                'mimes:jpg,jpeg,png,pdf',
+                'mimetypes:image/jpeg,image/png,application/pdf',
+                'max:2048',
+            ],
+            'email'     => 'required|email',
+            'alamat'    => 'required|string|max:255',
+            'no_hp'     => ['required', 'regex:/^\+62[0-9]{8,13}$/'],
         ]);
-        $gambar_ktp = $request->file('foto_ktp');
-        $gambar_ktp->storeAs('public/ktp', $gambar_ktp->hashName());
 
-        DB::update(
-            "UPDATE `pelanggan` SET `nama`=?,`nik`=?,`foto_ktp`=?,`email`=?,`alamat`=?,`no_hp`=? WHERE id_pelanggan=?",
-            [$request->nama, $request->nik, $request->foto_ktp->hashName(), $request->email, $request->alamat, $request->no_hp, $id]
+        $dataUpdate = [
+            'nama'   => $request->nama,
+            'nik'    => $request->nik,
+            'email'  => $request->email,
+            'alamat' => $request->alamat,
+            'no_hp'  => $request->no_hp,
+            'updated_at'        => now(),
+        ];
+
+        // Jika upload KTP baru
+        if ($request->hasFile('foto_ktp')) {
+            $old = DB::table('pelanggan')
+                ->where('id_pelanggan', $id)
+                ->value('foto_ktp');
+
+            if ($old) {
+                Storage::delete('ktp/' . $old);
+            }
+
+            $fotoKtp = $request->file('foto_ktp');
+            $fotoKtp->storeAs('ktp', $fotoKtp->hashName());
+            $dataUpdate['foto_ktp'] = $fotoKtp->hashName();
+        }
+
+        DB::table('pelanggan')
+            ->where('id_pelanggan', $id)
+            ->update($dataUpdate);
+
+        auditLog(
+            'UPDATE',
+            'pelanggan',
+            $id,
+            'Mengedit data pelanggan'
         );
 
-        return redirect()->route('pelanggan.index')->with(['success' => 'Data Berhasil Diupdate!']);
+        return redirect()->route('pelanggan.index')
+            ->with('success', 'Data Berhasil Diupdate!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        DB::table('pelanggan')->where('id_pelanggan', $id)->delete();
+        $foto = DB::table('pelanggan')
+            ->where('id_pelanggan', $id)
+            ->value('foto_ktp');
 
-        //redirect to index
-        return redirect()->route('pelanggan.index')->with(['success' => 'Data Berhasil Dihapus!']);
+        if ($foto) {
+            Storage::delete('ktp/' . $foto);
+        }
+
+        DB::table('pelanggan')
+            ->where('id_pelanggan', $id)
+            ->delete();
+
+        auditLog(
+            'DELETE',
+            'pelanggan',
+            $id,
+            'Menghapus data pelanggan'
+        );
+
+        return redirect()->route('pelanggan.index')
+            ->with('success', 'Data Berhasil Dihapus!');
     }
 }

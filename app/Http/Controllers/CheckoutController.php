@@ -50,7 +50,6 @@ class CheckoutController extends Controller
         [$request->nama,$request->no_hp,$request->email,$request->alamat,$request->tipe_kamar,$request->checkin_date,$request->checkout_date,$request->jumlah_orang]);
         return redirect()->route('checkout.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
-
     /**
      * Display the specified resource.
      *

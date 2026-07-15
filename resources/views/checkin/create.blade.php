@@ -1,100 +1,132 @@
 @extends('layouts.app-master')
+
 @section('content')
-@auth
-<body style="background: white">
-    <div class="container mt-5 mb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card border-0 shadow rounded">
-                    <div class="card-body">
-                        <form action="{{ route('checkin.store') }}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">No Kamar</label>
-                                <select class="form-control @error('id_kamar') is-invalid @enderror" name="id_kamar">
-                                @foreach ($kamar as $datakamar)
-                                    <option value="{{$datakamar->id_kamar}}">{{$datakamar->no_kamar}}</option>
-                                    @endforeach
-                                </select>
-                                <!-- error message untuk tipe_kamar -->
-                                @error('id_kamar')
-                                <div class="alert alert-danger mt-2">
+    @auth
+        <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card border-0 shadow rounded">
+                            <div class="card-body">
+                                <h4 class="">Tambah Check In</h4>
+                                <form action="{{ route('checkin.store') }}" method="POST">
+                                    @csrf
 
-                                    {{ $message }}
-                                </div>
-                                @enderror
+                                    {{-- PILIH PELANGGAN --}}
+                                    <div class="form-group mb-3">
+                                        <label>Nama Pelanggan</label>
+                                        <select name="id_pelanggan"
+                                            class="form-control @error('id_pelanggan') is-invalid @enderror" required>
+                                            <option value="">-- Pilih Pelanggan --</option>
+                                            @foreach ($pelanggan as $p)
+                                                <option value="{{ $p->id_pelanggan }}"
+                                                    {{ old('id_pelanggan') == $p->id_pelanggan ? 'selected' : '' }}>
+                                                    {{ $p->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('id_pelanggan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- PILIH TIPE KAMAR --}}
+                                    <div class="form-group mb-3">
+                                        <label>Tipe Kamar</label>
+                                        <select id="tipe_kamar" class="form-control" required>
+                                            <option value="">-- Pilih Tipe Kamar --</option>
+                                            @foreach ($kamar->groupBy('nama_tipe') as $tipe => $list)
+                                                <option value="{{ $tipe }}" data-harga="{{ $list->first()->harga }}">
+                                                    {{ $tipe }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    {{-- PILIH KAMAR TERSEDIA --}}
+                                    <div class="form-group mb-3">
+                                        <label>Nomor Kamar</label>
+                                        <select name="id_kamar" id="id_kamar"
+                                            class="form-control @error('id_kamar') is-invalid @enderror" required>
+                                            <option value="">-- Pilih Kamar --</option>
+                                            @foreach ($kamar as $k)
+                                                <option value="{{ $k->id_kamar }}" data-tipe="{{ $k->nama_tipe }}">
+                                                    {{ $k->no_kamar }} ({{ $k->nama_tipe }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('id_kamar')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- CHECK IN DATE --}}
+                                    <div class="form-group mb-3">
+                                        <label>Tanggal Check In</label>
+                                        <input type="date" name="checkin_date"
+                                            class="form-control @error('checkin_date') is-invalid @enderror" required>
+                                        @error('checkin_date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- CHECK OUT DATE --}}
+                                    <div class="form-group mb-3">
+                                        <label>Tanggal Check Out</label>
+                                        <input type="date" name="checkout_date"
+                                            class="form-control @error('checkout_date') is-invalid @enderror" required>
+                                        @error('checkout_date')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- HARGA --}}
+                                    <div class="form-group mb-4">
+                                        <label>Harga per Malam</label>
+                                        <input type="text" id="harga" class="form-control" readonly
+                                            placeholder="Pilih tipe kamar">
+                                    </div>
+
+                                    <button class="btn btn-primary">Simpan</button>
+                                    <a href="{{ route('checkin.index') }}" class="btn btn-secondary">Kembali</a>
+
+                                </form>
+
                             </div>
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">Nama</label>
-                                <select class="form-control @error('id_pelanggan') is-invalid @enderror" name="id_pelanggan">
-                                @foreach ($pelanggan as $datapelanggan)
-                                    <option value="{{$datapelanggan->id_pelanggan}}">{{$datapelanggan->nama}}</option>
-                                    @endforeach
-                                </select>
-                                <!-- error message untuk tipe_kamar -->
-                                @error('id_pelanggan')
-                                <div class="alert alert-danger mt-2">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                                <div class="form-group mb-4">
-                                <label class="font-weight-bold">Status</label>
-                                <select class="form-control @error('status') is-invalid @enderror" name="status">
-                                    <option value="Aktif">Aktif</option>
-                                    <option value="Checkout">Checkout</option>
-                                    <option value="Reservasi">Reservasi</option>
-                                </select>
-                                <!-- error message untuk tipe_kamar -->
-                                @error('status')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">Check In Date</label>
-                                <input type="date" class="form-control @error('checkin_date') is-invalid @enderror" name="checkin_date" placeholder="Check In Date">
-                                <!-- error message untuk no_hp -->
-                                @error('checkin_date')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">Check Out Date</label>
-                                <input type="date" class="form-control @error('checkout_date') is-invalid @enderror" name="checkout_date" placeholder="Check Out Date">
-                                <!-- error message untuk checkout_date -->
-                                @error('checkout_date')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="form-group mb-4">
-                                <label class="font-weight-bold">Jumlah Orang</label>
-                                <input type="number" class="form-control @error('jumlah_orang') is-invalid @enderror" name="jumlah_orang" placeholder="Jumlah Orang">
-                                <!-- error message untuk no_hp -->
-                                @error('jumlah_orang')
-                                <div class="alert alert-danger mt-2">
-
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-
-                            <button type="submit" class="btn btn-md btn-primary">SIMPAN</button>
-
-                            <button type="reset" class="btn btn-md btn-warning">RESET</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
+                </div>
             </div>
-        </div>
-    </div>
-    @endauth
+
+            {{-- SCRIPT FILTER KAMAR + AUTO HARGA --}}
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    const tipeSelect = document.getElementById('tipe_kamar');
+                    const kamarSelect = document.getElementById('id_kamar');
+                    const hargaInput = document.getElementById('harga');
+
+                    tipeSelect.addEventListener('change', function() {
+                        const tipe = this.value;
+                        const harga = this.options[this.selectedIndex].dataset.harga;
+
+                        hargaInput.value = harga ?
+                            'Rp ' + Number(harga).toLocaleString('id-ID') :
+                            '';
+
+                        Array.from(kamarSelect.options).forEach(opt => {
+                            if (!opt.value) return;
+                            opt.hidden = opt.dataset.tipe !== tipe;
+                        });
+
+                        kamarSelect.value = '';
+                    });
+                });
+            </script>
+
+            </body>
+        @endauth
     @endsection
