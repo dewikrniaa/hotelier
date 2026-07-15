@@ -9,8 +9,14 @@ class Pelanggan extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_pelanggan';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     public function checkin()
     {
-        return $this->hasMany(Checkin::class);
+        return $this->hasMany(Checkin::class, 'id_pelanggan', 'id_pelanggan');
     }
 }
