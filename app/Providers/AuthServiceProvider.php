@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rules\Password;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -18,13 +19,19 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Register any authentication / authorization services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
 
-        //
+        // 🔐 DEFAULT PASSWORD RULE (GLOBAL)
+        Password::defaults(function () {
+            return Password::min(8)          // minimal 8 karakter
+                ->letters()                 // wajib ada huruf
+                ->mixedCase()               // huruf besar & kecil
+                ->numbers()                 // wajib ada angka
+                ->symbols();                 // wajib ada simbol
+                // ->uncompromised();          // tidak pernah bocor
+        });
     }
 }
