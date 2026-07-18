@@ -1,66 +1,215 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Sistem Pengelolaan Hotel
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Pengelolaan Hotel adalah aplikasi berbasis web untuk membantu pengelolaan operasional hotel. Aplikasi ini digunakan untuk mengelola data kamar, pelanggan, proses check-in, pembayaran, checkout, dan laporan pendapatan.
 
-## About Laravel
+Project ini dikembangkan secara kolaboratif menggunakan Laravel dan MySQL dengan struktur MVC. Repository digunakan sebagai dokumentasi pengembangan dan versioning source code.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Login dan registrasi pengguna/admin.
+- Pengelolaan data kamar dan tipe kamar.
+- Pengelolaan data pelanggan.
+- Proses check-in pelanggan.
+- Proses pembayaran.
+- Proses checkout dan perubahan status kamar.
+- Laporan pendapatan.
+- Export laporan ke PDF dan Excel.
+- Audit log untuk mencatat aktivitas penting pengguna.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Teknologi yang Digunakan
 
-## Learning Laravel
+| Komponen | Fungsi |
+| --- | --- |
+| Laravel 9 | Framework utama aplikasi berbasis MVC |
+| PHP 8 | Bahasa pemrograman backend |
+| MySQL | Database relasional |
+| phpMyAdmin | Pengelolaan database secara visual |
+| Blade Template | Tampilan halaman aplikasi |
+| Bootstrap / Tailwind CSS | Desain antarmuka |
+| Vite | Build asset frontend |
+| DomPDF | Export laporan ke PDF |
+| Laravel Excel | Export laporan ke Excel |
+| Git dan GitHub | Versioning source code |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Struktur Project
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Folder / File | Fungsi |
+| --- | --- |
+| `app/Http/Controllers` | Berisi controller untuk proses bisnis aplikasi |
+| `app/Models` | Berisi model data aplikasi |
+| `app/Helpers/AuditLog.php` | Helper pencatatan aktivitas pengguna |
+| `app/Exports` | Export laporan ke Excel |
+| `database/migrations` | Struktur tabel dan relasi database |
+| `resources/views` | Tampilan halaman aplikasi |
+| `routes/web.php` | Pengaturan route aplikasi |
+| `public` | Asset publik aplikasi |
+| `.env` | Konfigurasi environment dan koneksi database |
 
-## Laravel Sponsors
+## Struktur Database
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Database yang digunakan: `edotel`
 
-### Premium Partners
+Tabel utama:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- `users`
+- `tipe_kamar`
+- `kamar`
+- `pelanggan`
+- `checkin`
+- `audit_logs`
 
-## Contributing
+Relasi foreign key:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- `kamar.tipe_kamar_id` mengacu ke `tipe_kamar.id`
+- `checkin.id_pelanggan` mengacu ke `pelanggan.id_pelanggan`
+- `checkin.id_kamar` mengacu ke `kamar.id_kamar`
+- `audit_logs.user_id` mengacu ke `users.id`
 
-## Code of Conduct
+## Instalasi Project
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Clone repository:
 
-## Security Vulnerabilities
+```bash
+git clone https://github.com/dewikrniaa/hotelier.git
+cd hotelier
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. Install dependency PHP:
 
-## License
+```bash
+composer install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. Install dependency frontend:
 
-Denisa Ruthdiani Siagian 2257301031
+```bash
+npm install
+```
+
+4. Salin file environment:
+
+```bash
+cp .env.example .env
+```
+
+Jika menggunakan Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+5. Generate application key:
+
+```bash
+php artisan key:generate
+```
+
+6. Atur konfigurasi database pada file `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=edotel
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+7. Buat database `edotel` melalui phpMyAdmin atau MySQL.
+
+8. Jalankan migration:
+
+```bash
+php artisan migrate
+```
+
+9. Jalankan build asset:
+
+```bash
+npm run build
+```
+
+10. Jalankan aplikasi:
+
+```bash
+php artisan serve
+```
+
+Aplikasi dapat diakses melalui:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Alur Penggunaan Aplikasi
+
+1. Pengguna/admin login ke sistem.
+2. Admin mengelola data kamar dan tipe kamar.
+3. Admin mencatat data pelanggan.
+4. Admin melakukan proses check-in dengan memilih pelanggan dan kamar tersedia.
+5. Sistem menghitung lama menginap dan total harga.
+6. Admin memproses pembayaran pelanggan.
+7. Admin melakukan checkout.
+8. Sistem mengubah status kamar dan menyimpan riwayat transaksi.
+9. Admin melihat laporan pendapatan dan melakukan export laporan jika diperlukan.
+
+## Modul Utama
+
+| Modul | Fungsi |
+| --- | --- |
+| Dashboard | Menampilkan ringkasan data hotel |
+| Kamar | Mengelola data kamar dan status kamar |
+| Pelanggan | Mengelola data pelanggan hotel |
+| Check-in | Mencatat transaksi menginap |
+| Pembayaran | Mengubah status pembayaran pelanggan |
+| Checkout | Mengakhiri proses menginap dan mengubah status kamar |
+| Laporan | Menampilkan dan export laporan pendapatan |
+| Audit Log | Mencatat aktivitas penting pengguna |
+
+## Best Practices yang Diterapkan
+
+- Struktur MVC Laravel untuk memisahkan controller, model, view, dan route.
+- Validasi input menggunakan `$request->validate()`.
+- Query database menggunakan Laravel Query Builder.
+- Foreign key untuk menjaga relasi antar tabel.
+- `DB::transaction()` pada proses yang melibatkan lebih dari satu tabel.
+- Audit log untuk mencatat aktivitas penting.
+- Versioning source code menggunakan Git dan GitHub.
+
+## Pengujian
+
+Perintah yang dapat digunakan untuk pengujian dan validasi:
+
+```bash
+php artisan migrate:status
+php artisan test
+npm run build
+```
+
+Catatan: route `/` pada aplikasi diarahkan ke halaman login, sehingga test bawaan Laravel yang mengharapkan status `200` pada `/` perlu disesuaikan dengan alur aplikasi.
+
+## Repository
+
+Repository GitHub:
+
+```text
+https://github.com/dewikrniaa/hotelier
+```
+
+## Kontributor
+
+- Dewi Kurnia Sari
+- Lutfi Ainnun Fruityantri
+- Shasy Wiade Putri
+- Denisa Ruthdiani Siagian
+
+## Catatan Pengembangan
+
+Project ini dapat dikembangkan lebih lanjut dengan:
+
+- Menambahkan role pengguna.
+- Menambahkan stored procedure atau trigger database untuk audit log otomatis.
+- Menambahkan dokumentasi ERD.
+- Menambahkan pengujian fitur untuk modul kamar, pelanggan, check-in, dan laporan.
+- Menyempurnakan README dengan screenshot aplikasi.
+

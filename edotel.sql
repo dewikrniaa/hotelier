@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `audit_logs` (
   `id` bigint NOT NULL,
-  `user_id` char(36) DEFAULT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
   `action` varchar(50) NOT NULL,
   `table_name` varchar(50) NOT NULL,
   `record_id` char(36) DEFAULT NULL,
@@ -205,7 +205,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (10, '2025_12_17_165844_create_laporan_table', 1),
 (11, '2026_01_06_161558_add_timestamps_to_checkin_table', 2),
 (12, '2026_01_06_233901_add_timestamps_to_pelanggan_table', 3),
-(13, '2026_01_06_234307_add_timestamps_to_kamar_table', 4);
+(13, '2026_01_06_234307_add_timestamps_to_kamar_table', 4),
+(14, '2026_07_16_015500_add_foreign_keys_to_hotel_tables', 5),
+(15, '2026_07_16_020000_add_user_foreign_key_to_audit_logs_table', 6);
 
 -- --------------------------------------------------------
 
@@ -321,13 +323,16 @@ INSERT INTO `users` (`id`, `name`, `email`, `username`, `email_verified_at`, `pa
 -- Indexes for table `audit_logs`
 --
 ALTER TABLE `audit_logs`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `audit_logs_user_id_index` (`user_id`);
 
 --
 -- Indexes for table `checkin`
 --
 ALTER TABLE `checkin`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `checkin_id_pelanggan_index` (`id_pelanggan`),
+  ADD KEY `checkin_id_kamar_index` (`id_kamar`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -340,7 +345,8 @@ ALTER TABLE `failed_jobs`
 -- Indexes for table `kamar`
 --
 ALTER TABLE `kamar`
-  ADD PRIMARY KEY (`id_kamar`);
+  ADD PRIMARY KEY (`id_kamar`),
+  ADD KEY `kamar_tipe_kamar_id_index` (`tipe_kamar_id`);
 
 --
 -- Indexes for table `migrations`
@@ -402,7 +408,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -421,6 +427,29 @@ ALTER TABLE `tipe_kamar`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `audit_logs`
+--
+ALTER TABLE `audit_logs`
+  ADD CONSTRAINT `audit_logs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `kamar`
+--
+ALTER TABLE `kamar`
+  ADD CONSTRAINT `kamar_tipe_kamar_id_foreign` FOREIGN KEY (`tipe_kamar_id`) REFERENCES `tipe_kamar` (`id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `checkin`
+--
+ALTER TABLE `checkin`
+  ADD CONSTRAINT `checkin_id_pelanggan_foreign` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id_pelanggan`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `checkin_id_kamar_foreign` FOREIGN KEY (`id_kamar`) REFERENCES `kamar` (`id_kamar`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
