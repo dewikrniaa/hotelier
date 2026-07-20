@@ -26,11 +26,12 @@ class AuthenticatedSessionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'login' => ['required'],
+            'login' => ['required_without:email'],
+            'email' => ['required_without:login', 'email'],
             'password' => ['required'],
         ]);
 
-        $login = $request->login;
+        $login = $request->input('login', $request->input('email'));
 
         $field = filter_var($login, FILTER_VALIDATE_EMAIL)
             ? 'email'

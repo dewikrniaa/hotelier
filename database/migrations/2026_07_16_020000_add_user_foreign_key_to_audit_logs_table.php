@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         DB::statement('ALTER TABLE audit_logs MODIFY user_id BIGINT UNSIGNED NULL');
 
         Schema::table('audit_logs', function ($table) {
@@ -23,6 +27,10 @@ return new class extends Migration
 
     public function down()
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         Schema::table('audit_logs', function ($table) {
             $table->dropForeign('audit_logs_user_id_foreign');
             $table->dropIndex('audit_logs_user_id_index');

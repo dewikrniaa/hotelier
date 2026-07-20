@@ -2,12 +2,17 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up()
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         Schema::table('kamar', function (Blueprint $table) {
             $table->index('tipe_kamar_id', 'kamar_tipe_kamar_id_index');
 
@@ -38,6 +43,10 @@ return new class extends Migration
 
     public function down()
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         Schema::table('checkin', function (Blueprint $table) {
             $table->dropForeign('checkin_id_pelanggan_foreign');
             $table->dropForeign('checkin_id_kamar_foreign');
