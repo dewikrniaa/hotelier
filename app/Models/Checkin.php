@@ -9,6 +9,8 @@ class Checkin extends Model
 {
     use HasFactory;
 
+    protected $table = 'checkin';
+
     public $incrementing = false;
 
     protected $keyType = 'string';
