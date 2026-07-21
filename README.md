@@ -1,4 +1,4 @@
-# Sistem Pengelolaan Hotel
+# Sistem Pengelolaan Hotel Berbasis Website
 
 Sistem Pengelolaan Hotel adalah aplikasi berbasis web untuk membantu pengelolaan operasional hotel. Aplikasi ini digunakan untuk mengelola data kamar, pelanggan, proses check-in, pembayaran, checkout, dan laporan pendapatan.
 
